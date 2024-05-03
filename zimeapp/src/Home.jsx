@@ -14,7 +14,9 @@ const Home = () => {
   const [selectedTags, setSelectedTags] = useState([]);
   const [searchText, setSearchText] = useState("");
 
-  // Select tags
+
+
+  
   const handleChange = (selectedTags) => {
     setSelectedTags(selectedTags);
   };
