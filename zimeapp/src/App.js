@@ -1,13 +1,17 @@
 
+import { Router, Routes } from 'react-router-dom';
 import './App.css';
 import Home from './Home';
+import { Switch } from 'antd';
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-    <Home/>
-    </div>
+    <Router>
+      <Switch>
+        <Routes path="/" component={Home} />
+      </Switch>
+    </Router>
   );
-}
+};
 
 export default App;

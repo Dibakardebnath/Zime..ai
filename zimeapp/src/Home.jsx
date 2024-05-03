@@ -2,7 +2,9 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./Home.css";
 
+
 import { Select, Input, Flex, Table, Tag } from "antd";
+import { useLocation, useSearchParams } from "react-router-dom";
 
 const { Search } = Input;
 
@@ -14,9 +16,22 @@ const Home = () => {
   const [selectedTags, setSelectedTags] = useState([]);
   const [searchText, setSearchText] = useState("");
 
+  //URL param
 
+  const [searchParam,setSearchParam]=useSearchParams();
+  const location=useLocation();
+  const currentPath=location.pathname;
+  const queryParams=new URLSearchParams(location.search)
+  let urlParams=new URLSearchParams(searchParam)
 
+  // GET URL params data
   
+  const query= searchParam.get("page");
+  const search=searchParam.get("searchText" ?? "");
+ const filterParam= searchParam.get("filter");
+ const [text,setText]=useState(search ?? "")
+
+
   const handleChange = (selectedTags) => {
     setSelectedTags(selectedTags);
   };
