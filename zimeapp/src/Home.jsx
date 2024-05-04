@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./Home.css";
-
-
 import { Select, Input, Flex, Table, Tag } from "antd";
-import { useLocation, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 
 const { Search } = Input;
 
@@ -18,22 +16,24 @@ const Home = () => {
 
   //URL param
 
-  const [searchParam,setSearchParam]=useSearchParams();
-  const location=useLocation();
-  const currentPath=location.pathname;
-  const queryParams=new URLSearchParams(location.search)
-  let urlParams=new URLSearchParams(searchParam)
+  const [searchParam, setSearchParam] = useSearchParams();
 
   // GET URL params data
-  
-  const query= searchParam.get("page");
-  const search=searchParam.get("searchText" ?? "");
- const filterParam= searchParam.get("filter");
- const [text,setText]=useState(search ?? "")
 
+  const query = searchParam.get("page");
+  console.log(query);
+  const search = searchParam.get("search") || "";
 
-  const handleChange = (selectedTags) => {
-    setSelectedTags(selectedTags);
+  const tag = searchParam.get("tag");
+
+  const handleChange = (tag) => {
+    setSearchParam({ tag: tag, search: search });
+    setSelectedTags(tag);
+  };
+
+  const handleSearch = (e) => {
+    setSearchParam({ tag: selectedTags, search: e.target.value });
+    setSearchText(search);
   };
 
   const options = [
@@ -92,8 +92,6 @@ const Home = () => {
   // Fetch data
   useEffect(() => {
     fetchData(limit, skip);
-    addparam("tag", `${selectedTags}`);
-    addparam("search", `${searchText}`);
   }, [limit, skip, selectedTags, searchText]);
 
   const fetchData = async (limit, skip) => {
@@ -171,14 +169,6 @@ const Home = () => {
     },
   ];
 
-  function addparam(key, value) {
-    const searchParam = new URLSearchParams(window.location.search);
-    searchParam.set(key, value);
-    const newRelative = window.location.pathname + "?" + searchParam.toString();
-
-    window.history.pushState(null, "", newRelative);
-  }
-
   return (
     <>
       {loader ? (
@@ -207,7 +197,7 @@ const Home = () => {
               allowClear
               enterButton="Search"
               size="large"
-              onSearch={(value) => setSearchText(value)}
+              onChange={handleSearch}
             />
           </Flex>
           <Flex className="table">
